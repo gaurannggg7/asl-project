@@ -1,0 +1,6 @@
+vosk
+nltk
+moviepy
+opencv-python
+numpy
+PyQt5

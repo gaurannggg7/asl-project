@@ -1,0 +1,1 @@
+# 🧏‍♂️ Speech-to-ASL Translator
