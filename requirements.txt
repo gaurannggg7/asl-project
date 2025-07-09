@@ -1,6 +1,7 @@
-vosk
-nltk
-moviepy
-opencv-python
-numpy
-PyQt5
+vosk==0.3.44
+pyaudio==0.2.14     # realtime mic; comment out on Linux if using ALSA directly
+nltk==3.8.1
+moviepy==1.0.3
+opencv-python==4.10.0.82
+numpy>=1.25
+PyQt5==5.15.10      # optional GUI

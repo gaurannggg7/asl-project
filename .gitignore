@@ -1,0 +1,16 @@
+# Python & virtualenv
+__pycache__/
+*.pyc
+.venv/
+
+# Models and large assets
+models/
+asl_videos/
+*.wav
+*.mp4
+*.webm
+
+# Mac & IDE noise
+.DS_Store
+.idea/
+
