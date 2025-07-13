@@ -16,3 +16,6 @@ def transcribe_file(wav_path: str) -> str:
     """
     result = asr(wav_path)
     return result["text"]
+if __name__ == "__main__":
+    text = transcribe_file("tests/hello_borrow_book.wav")
+    print("GemmaASR →", text)
