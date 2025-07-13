@@ -1,38 +1,18 @@
-import queue, sys
-import pyaudio
-from vosk import Model, KaldiRecognizer
+import torch
+from transformers import pipeline
 
-class SpeechRecognizer:
-    def __init__(self, model_path: str, sample_rate: int = 16000):
-        self.model = Model(model_path)
-        self.recognizer = KaldiRecognizer(self.model, sample_rate)
-        self.sample_rate = sample_rate
-        self.q = queue.Queue()
-        self.device_index = 0
+# Load once, on import
+device = 0 if torch.cuda.is_available() else -1
+asr = pipeline(
+    "automatic-speech-recognition",
+    model="path/to/gemma-3n-e2b-it",      # or your Drive path
+    device=device,
+    chunk_length_s=30,                    # adjust for longer audio
+)
 
-    def _callback(self, in_data, *_args):
-        self.q.put(in_data)
-        return (None, pyaudio.paContinue)
-
-    def listen(self):
-        pa = pyaudio.PyAudio()
-        stream = pa.open(format=pyaudio.paInt16,
-                         channels=1,
-                         rate=self.sample_rate,
-                         input=True,
-                         frames_per_buffer=8000,
-                         stream_callback=self._callback,
-                         input_device_index =self.device_index      )
-        stream.start_stream()
-        transcript = []
-        try:
-            while True:
-                data = self.q.get()
-                if self.recognizer.AcceptWaveform(data):
-                    res = self.recognizer.Result()
-                    transcript.append(eval(res)["text"])
-        except KeyboardInterrupt:
-            pass
-        finally:
-            stream.stop_stream(), stream.close(), pa.terminate()
-        return " ".join(transcript).strip()
+def transcribe_file(wav_path: str) -> str:
+    """
+    Transcribe a WAV file to text using Gemma 3n.
+    """
+    result = asr(wav_path)
+    return result["text"]
